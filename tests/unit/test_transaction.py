@@ -8,13 +8,13 @@ class testTransaction(unittest.TestCase):
     def test_get_transaction_serialized(self):
         first_user = User()
         second_user = User()
-        transaction = Transaction(10, first_user.address, second_user.sign_transaction(b"Test transaction"))
+        transaction = Transaction(10, first_user.address, second_user.address, second_user.sign_transaction(b"Test transaction"))
         self.assertIsInstance(transaction.get_transaction_serialized(), bytes)
         
     def test_init_success(self):
         first_user = User()
         second_user = User()
-        transaction = Transaction(10, first_user.address, second_user.sign_transaction(b"Test transaction"))
+        transaction = Transaction(10, first_user.address, second_user.address ,second_user.sign_transaction(b"Test transaction"))
         self.assertEqual(transaction.transaction_outputs.value, 10)
         self.assertEqual(transaction.transaction_outputs.receiver_address, first_user.address)
         self.assertEqual(transaction.transaction_inputs.transaction_output_hash, transaction.transaction_outputs.get_transaction_output_hash())
@@ -22,7 +22,7 @@ class testTransaction(unittest.TestCase):
         self.assertEqual(transaction.transaction_inputs.sequence_number, 0)
         self.assertTrue(transaction.check_transaction_validity())
         
-        transaction = Transaction(10, second_user.address, first_user.sign_transaction(b"Test transaction"), 1, 1)
+        transaction = Transaction(10, second_user.address, first_user.address,first_user.sign_transaction(b"Test transaction"), 1, 1)
         self.assertEqual(transaction.transaction_outputs.value, 10)
         self.assertEqual(transaction.transaction_outputs.receiver_address, second_user.address)
         self.assertEqual(transaction.transaction_inputs.transaction_output_hash, transaction.transaction_outputs.get_transaction_output_hash())
