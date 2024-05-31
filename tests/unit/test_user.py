@@ -1,6 +1,7 @@
 import unittest
 import ecdsa
 from user.User import User
+from transaction.TransactionData import TransactionData
 
 class TestUser(unittest.TestCase):
     def test_generate_address(self):
@@ -11,6 +12,7 @@ class TestUser(unittest.TestCase):
     
     def test_sign_transaction(self):
         user = User()
-        message = b"Test transaction"
-        signature = user.sign_transaction(message)
-        self.assertTrue(ecdsa.VerifyingKey.from_string(user.public_key.to_string()).verify(signature, message))
+        user2 = User()
+        transactionData = TransactionData(user.public_key, user2.public_key, 10)
+        signature = user.sign_transaction(transactionData.serialize())
+        self.assertTrue(ecdsa.VerifyingKey.from_string(user.public_key).verify(signature, transactionData.serialize()))

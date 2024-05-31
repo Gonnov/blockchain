@@ -1,7 +1,6 @@
-from block.Block import Block
+from Block.Block import Block
 from transaction.Transaction import Transaction
 from transaction.CoinbaseTransaction import CoinbaseTransaction
-
 from pymerkle import InmemoryTree as MerkleTree
 from pymerkle import verify_consistency, verify_inclusion
 import pickle
@@ -77,5 +76,12 @@ class Blockchain:
         
     def get_block(self, block_height: int) -> Block:
         return self.chain[block_height]
+    
+    def test_whole_blockchain(self) -> bool:
+        if self.check_whole_blocks() is False:
+            return False
+        self.check_consistency_tree()
+        self.check_inclusion_tree()
+        return True
 
     

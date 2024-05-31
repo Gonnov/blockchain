@@ -1,6 +1,6 @@
 import unittest
 import ecdsa
-from block.Block import Block
+from Block.Block import Block
 from pymerkle import InmemoryTree as MerkleTree
 
 class TestBlock(unittest.TestCase):
