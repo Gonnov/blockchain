@@ -48,12 +48,10 @@ class BlockchainNode(Node):
         elif data['type'] == "mempool":
             manageMempool(self, data['data'])
         elif data['type'] == "blockchain":
-            
-    
-    
+            manageBlockchain(self, data['data'])
+
     def node_disconnect_with_outbound_node(self, node):
         removePeer(self, [node.host, int(node.port)])
-    
     
     def add_transaction_mempool(self, transaction):
         if transaction not in self.mempool:

@@ -22,7 +22,7 @@ class TransactionInput:
         self.output_index = output_index
         self.sender_signature = sender_signature
         self.sequence_number = sequence_number
-        
+
     def verify_signature(self, transactionData) -> bool:
         vk = ecdsa.VerifyingKey.from_string(self.sender_public_key)
         try:

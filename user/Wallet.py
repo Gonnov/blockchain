@@ -2,7 +2,7 @@ import hashlib
 import ecdsa
 
 
-class User:
+class Wallet:
     def __init__(self):
         self.private_key = ecdsa.SigningKey.generate()
         self.public_key = self.private_key.get_verifying_key().to_string()
