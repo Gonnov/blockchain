@@ -5,7 +5,33 @@ from pymerkle import InmemoryTree as MerkleTree
 from pymerkle import verify_consistency, verify_inclusion
 import pickle
 
+from Utxo.Utxo import Utxo
+
 class Blockchain:
+    """
+    Represents the blockchain and provides methods for managing and verifying blocks and transactions.
+
+    Attributes:
+        tree (MerkleTree): The Merkle tree used to store transactions.
+        difficulty (int): The difficulty level for mining blocks.
+        coinbase_value (int): The reward value for mining a block.
+        chain (list): The list of blocks in the blockchain.
+
+    Methods:
+        create_genesis_block(): Creates the genesis block.
+        mine_block(miner_address, extra_nonce): Mines a new block.
+        add_block(transactions): Adds a new block to the blockchain.
+        check_whole_blocks(): Checks the integrity of the entire blockchain.
+        check_consistency_single_block(block_height): Verifies the consistency of a specific block.
+        check_consistency_tree(): Verifies the consistency of the entire blockchain tree.
+        check_inclusion_single_block(block_height): Verifies that a specific block is included in the blockchain.
+        check_inclusion_tree(): Verifies that all blocks in the blockchain are included.
+        get_block(block_height): Retrieves a block from the blockchain at a specified height.
+        check_every_transaction_of_a_block(block): Checks every transaction of a block for validity.
+        check_every_transaction_of_the_blockchain(): Checks every transaction of the entire blockchain for validity.
+        check_whole_blockchain(): Checks the integrity of the entire blockchain.
+    """
+
     def __init__(self) -> None:
         """
         Initialize the Blockchain.
@@ -223,6 +249,10 @@ class Blockchain:
         if self.check_inclusion_tree() is False:
             return False
         if self.check_every_transaction_of_the_blockchain() is False:
+            return False
+        try:
+            utxo = Utxo(self)
+        except:
             return False
         return True
 
