@@ -26,7 +26,10 @@ class TransactionOutput:
             miner_public_key (bytes): The public key of the receiver.
         """
         self.amount = amount
-        self.receiver_public_key = miner_public_key
+        if type(miner_public_key) == str:
+            self.receiver_public_key = bytes.fromhex(miner_public_key)
+        else:
+            self.receiver_public_key = miner_public_key
 
     def get_transaction_output_hash(self) -> str:
         """
@@ -53,7 +56,7 @@ class CoinbaseTransaction:
         check_transaction_validity(coinbase_value): Checks the validity of the transaction.
     """
 
-    def __init__(self, amount: int, miner_public_key: bytes) -> None:
+    def __init__(self, amount: int, miner_public_key: bytes, extra_nonce) -> None:
         """
         Initialize the CoinbaseTransaction.
 
@@ -64,6 +67,7 @@ class CoinbaseTransaction:
         self.transaction_outputs = TransactionOutput(amount, miner_public_key)
         self.transaction_id = uuid.uuid4()
         self.timestamp = date.datetime.now()
+        self.extra_nonce = extra_nonce
 
     def get_transaction_serialized(self) -> bytes:
         """

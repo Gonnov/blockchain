@@ -20,7 +20,7 @@ def take_to_sender(ledger: dict, transaction: Transaction) -> None:
     
 def manage_first_transaction(ledger: dict, first_transaction, coinbase_value) -> None:
     if first_transaction is None:
-        raise "no transaction"
+        return "no transaction"
     if first_transaction.check_transaction_validity(coinbase_value) is False:
         raise ValueError("invalid transactions")
     add_to_receiver(ledger, first_transaction)

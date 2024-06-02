@@ -7,7 +7,6 @@ from Node.dataManager.manageBlockchain import manageBlockchain
 
 from .utils import removePeer
 from  Blockchain.Blockchain import Blockchain
-from Utxo.Utxo import Utxo
 class BlockchainNode(Node):
     """
     Represents a node in the blockchain network.

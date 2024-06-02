@@ -1,11 +1,12 @@
 from Block.Block import Block
+from Blockchain.utxo_utils import set_transactions_in_ledger
 from transaction.Transaction import Transaction
 from transaction.CoinbaseTransaction import CoinbaseTransaction
 from pymerkle import InmemoryTree as MerkleTree
 from pymerkle import verify_consistency, verify_inclusion
 import pickle
+import ecdsa
 
-from Utxo.Utxo import Utxo
 
 class Blockchain:
     """
@@ -57,7 +58,7 @@ class Blockchain:
         block.merkle_hash = self.tree.get_leaf(merkle_index)
         return block
     
-    def mine_block(self, miner_address, extra_nonce) -> None:
+    def mine_block(self, miner_public_key, extra_nonce, mempool) -> None:
         """
         Mine a new block.
 
@@ -68,19 +69,18 @@ class Blockchain:
         Returns:
             bool: True if the block is successfully mined, False otherwise.
         """
-        #NEED TO ADD THE TRANSACTIONS FROM THE MEMPOOL
-        coinbase_transaction = CoinbaseTransaction(self.coinbase_value, miner_address)
-        block = Block(self.chain[-1], coinbase_transaction, self.tree)
+        coinbase_transaction = CoinbaseTransaction(self.coinbase_value, miner_public_key, extra_nonce)
+        transactions = mempool.insert(0, coinbase_transaction)
+        
+        block = Block(self.chain[-1], transactions, self.tree)
         difficulty_string = '0' * self.difficulty
-        if block.calculate_hash()[:self.difficulty] != difficulty_string: #NEED TO PUT A DIFFICULTY ALGORITHM
+        self.add_block(mempool)
+        while block.calculate_hash()[:self.difficulty] != difficulty_string: #NEED TO PUT A DIFFICULTY ALGORITHM
             if block.nonces == 4294967295:
                 block.nonces = 0
+                return False
             else:
-                block.nonces += 1
-            return False
-        else:
-            #NEED TO ADD THE TRANSACTIONS FROM THE MEMPOOL
-            self.add_block(block.transactions)
+                block.nonces += 1   
     
     def add_block(self, transactions: Transaction) -> None:
         """
@@ -219,6 +219,18 @@ class Blockchain:
                 return False
         return True
     
+    def get_public_key_from_private_key(self, private_key: bytes) -> bytes:
+        """
+        Retrieve the public key from a given private key.
+        
+        Args:
+            private_key (bytes): The private key to derive the public key from.
+        
+        Returns:
+            bytes: The public key corresponding to the given private key.
+        """
+        return ecdsa.SigningKey.from_string(private_key).get_verifying_key().to_string()
+    
     def check_every_transaction_of_the_blockchain(self) -> bool:
         """
         Check every transaction of the entire blockchain for validity.
@@ -230,6 +242,31 @@ class Blockchain:
             if self.check_every_transaction_of_a_block(block) is False:
                 return False
         return True
+    
+    def get_every_utxo(self) -> dict:
+        """
+        Constructs the UTXO set from the blockchain.
+
+        Iterates through the blockchain to create a dictionary representing the UTXO set,
+        by including all valid transactions.
+
+        Args:
+            blockchain (Blockchain): The blockchain from which to construct the UTXO set.
+
+        Returns:
+            dict: The dictionary representing the UTXO set.
+
+        Raises:
+            ValueError: If any invalid transactions are found in the blockchain.
+        """
+
+        ledger = {}
+        for block in self.chain:
+            try:
+                set_transactions_in_ledger(ledger, block.transactions, self.coinbase_value)
+            except ValueError:
+                raise ValueError("invalid transactions")
+        return ledger
     
     def check_whole_blockchain(self) -> bool:
         """
@@ -251,8 +288,8 @@ class Blockchain:
         if self.check_every_transaction_of_the_blockchain() is False:
             return False
         try:
-            utxo = Utxo(self)
-        except:
+            self.get_every_utxo()
+        except ValueError:
             return False
         return True
 

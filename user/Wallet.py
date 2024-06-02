@@ -51,3 +51,9 @@ class Wallet:
             bytes: The signature of the transaction data.
         """
         return self.private_key.sign(transactionData)
+    
+    def get_private_key_hex(self):
+        return self.private_key.to_string().hex()
+
+    def get_public_key_hex(self):
+        return self.public_key.hex()

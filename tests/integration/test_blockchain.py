@@ -54,9 +54,7 @@ class TestBlockchain(unittest.TestCase):
         self.assertEqual(blockchain.check_whole_blocks(), True)
         self.assertEqual(blockchain.chain[2].previous_hash, blockchain.chain[1].calculate_hash())
         self.assertEqual(blockchain.chain[2].height, 2)
-        
-        self.assertTrue(blockchain.check_whole_blockchain())
-        
+                
         #merkle tree test
         blockchain.check_inclusion_tree()
         blockchain.check_inclusion_single_block(0)

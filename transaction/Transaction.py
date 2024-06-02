@@ -26,7 +26,10 @@ class TransactionOutput:
             receiver_public_key (bytes): The public key of the receiver.
         """
         self.amount = amount
-        self.receiver_public_key = receiver_public_key
+        if type(receiver_public_key) == str:
+            self.receiver_public_key = bytes.fromhex(receiver_public_key)
+        else:
+            self.receiver_public_key = receiver_public_key
 
     def get_transaction_output_hash(self) -> str:
         """
@@ -67,7 +70,10 @@ class TransactionInput:
             sequence_number (int): The sequence number of the transaction.
         """
         self.transaction_output_hash = transaction_output.get_transaction_output_hash()
-        self.sender_public_key = sender_public_key
+        if type(sender_public_key) == str:
+            sender_public_key = bytes.fromhex(sender_public_key)
+        else:
+            sender_public_key = sender_public_key
         self.sender_signature = sender_signature
         self.output_index = output_index
         self.sequence_number = sequence_number
