@@ -41,7 +41,7 @@ class Blockchain:
         assigns the coinbase value, and creates the genesis block.
         """
         self.tree = MerkleTree(algorithm='sha256')
-        self.difficulty = 4
+        self.difficulty = 6
         self.coinbase_value = 50
         self.chain = [self.create_genesis_block()]
     
@@ -58,7 +58,7 @@ class Blockchain:
         block.merkle_hash = self.tree.get_leaf(merkle_index)
         return block
     
-    def mine_block(self, miner_public_key, extra_nonce, mempool) -> None:
+    def start_mining(self, miner_public_key, extra_nonce, mempool) -> None:
         """
         Mine a new block.
 
@@ -70,17 +70,14 @@ class Blockchain:
             bool: True if the block is successfully mined, False otherwise.
         """
         coinbase_transaction = CoinbaseTransaction(self.coinbase_value, miner_public_key, extra_nonce)
-        transactions = mempool.insert(0, coinbase_transaction)
+        transactions = mempool[:2000]
+        transactions = transactions.insert(0, coinbase_transaction)
         
-        block = Block(self.chain[-1], transactions, self.tree)
-        difficulty_string = '0' * self.difficulty
+        block = Block(self.chain[-1], transactions, self.difficulty)
+        while block.mine_block() is False: #NEED TO PUT A DIFFICULTY ALGORITHM
+            block.transactions[0].extra_nonce += 1
         self.add_block(mempool)
-        while block.calculate_hash()[:self.difficulty] != difficulty_string: #NEED TO PUT A DIFFICULTY ALGORITHM
-            if block.nonces == 4294967295:
-                block.nonces = 0
-                return False
-            else:
-                block.nonces += 1   
+        return True 
     
     def add_block(self, transactions: Transaction) -> None:
         """

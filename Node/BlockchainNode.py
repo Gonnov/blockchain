@@ -4,7 +4,6 @@ import json
 from Node.dataManager.manageMempool import manageMempool
 from Node.dataManager.managePeers import managePeers
 from Node.dataManager.manageBlockchain import manageBlockchain
-
 from .utils import removePeer
 from  Blockchain.Blockchain import Blockchain
 class BlockchainNode(Node):
@@ -56,6 +55,7 @@ class BlockchainNode(Node):
         """
         i = 0
         while self.connect_with_node(ip, port) is False and i < 5:
+            print("Connection failed, retrying...")
             i += 1
 
     def inbound_node_connected(self, node: Node):
@@ -66,13 +66,14 @@ class BlockchainNode(Node):
             node (Node): The inbound node that connected.
         """
         if [node.ip, int(node.port)] not in self.peers:
-            self.peers.append([node.ip, int(node.port)])
+            self.peers.append([node.ip, int(node.port)]) 
         i = 0
-        while self.connect_with_node(node.ip, int(node.port)) is False and i < 5:
-            i += 1
-        self.send_data_to_node(node, "peers", self.peers)
-        self.send_data_to_node(node, "mempool", self.mempool)
-        self.send_data_to_node(node, "blockchain", self.blockchain.chain)
+        print(node.ip, node.port)
+        # while self.connect_with_node(node.ip, int(node.port)) is False and i < 5:
+        #     i += 1
+        # self.send_data_to_node(node, "peers", self.peers)
+        # self.send_data_to_node(node, "mempool", self.mempool)
+        # self.send_data_to_node(node, "blockchain", self.blockchain.chain)
 
     def inbound_node_disconnected(self, node: Node):
         """
@@ -92,7 +93,7 @@ class BlockchainNode(Node):
         """
         removePeer(self, [node.ip, int(node.port)])
 
-    def node_message(self, node: Node, data: dict):
+    def node_message(self, data: dict):
         """
         Handles messages received from other nodes.
 
@@ -100,12 +101,13 @@ class BlockchainNode(Node):
             node (Node): The node from which the message was received.
             data (dict): The message data.
         """
-        if data['type'] == "peers":
-            managePeers(self, data['data'])
-        elif data['type'] == "mempool":
-            manageMempool(self, data['data'])
-        elif data['type'] == "blockchain":
-            manageBlockchain(self, data['data'])
+        # print(data['type'])
+        # if data['type'] == "peers":
+        #     managePeers(self, data['data'])
+        # elif data['type'] == "mempool":
+        #     manageMempool(self, data['data'])
+        # elif data['type'] == "blockchain":
+        #     manageBlockchain(self, data['data'])
 
     def node_disconnect_with_outbound_node(self, node: Node):
         """
@@ -143,3 +145,16 @@ class BlockchainNode(Node):
         }
         serialized_data = json.dumps(data).encode('utf-8')
         self.send_to_node(node, serialized_data)
+
+    def send_data_to_all_nodes(self, type: str, data):
+        """
+        Sends data to all connected nodes.
+
+        Parameters:
+            node (Node): The node to which data is sent.
+            type (str): The type of data being sent.
+            data (any): The data to send.
+        """
+        for peer in self.peers:
+            self.send_data_to_node(peer, type, data)
+        pass

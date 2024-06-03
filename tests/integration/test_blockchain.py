@@ -30,7 +30,7 @@ class TestBlockchain(unittest.TestCase):
         blockchain.check_consistency_single_block(0)
         blockchain.check_consistency_single_block(1)
         
-    def test_blockchain_two_blocks_no_mmining_success(self):
+    def test_blockchain_two_blocks_no_mining_success(self):
         blockchain = Blockchain()
         
         #add block test

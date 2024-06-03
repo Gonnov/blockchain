@@ -21,7 +21,7 @@ def make_basic_transaction():
     return transaction
 
 def make_coinbase_transaction(user: Wallet, amount: int):
-    coinbase_transaction = CoinbaseTransaction(amount, user.public_key)
+    coinbase_transaction = CoinbaseTransaction(amount, user.public_key, 1)
     return coinbase_transaction
 
 def make_transaction(sender: Wallet, receiver: Wallet, amount: int):
