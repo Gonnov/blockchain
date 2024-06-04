@@ -67,16 +67,18 @@ class TestBlockchain(unittest.TestCase):
 
     def test_mining_no_transaction_success(self):
         blockchain = Blockchain()
+        blockchain.difficulty = 1
         miner = Wallet()
         #mine block test
         extra_nonce = 'xzOFl8XXAP4vytPn'
-        while blockchain.mine_block(miner.public_key, extra_nonce) is False:
+        mempool = [make_basic_coinbase_transaction(50)]
+        while blockchain.start_mining(miner.public_key, extra_nonce, mempool) is False:
             extra_nonce =''.join(random.choices(string.ascii_letters + string.digits, k=16))
         self.assertEqual(len(blockchain.chain), 2)
         self.assertEqual(blockchain.check_whole_blocks(), True)
         self.assertEqual(blockchain.chain[1].previous_hash, blockchain.chain[0].calculate_hash())
         self.assertEqual(blockchain.chain[1].height, 1)
-        
+
         #merkle tree test
         blockchain.check_inclusion_tree()
         blockchain.check_inclusion_single_block(0)
@@ -84,5 +86,3 @@ class TestBlockchain(unittest.TestCase):
         blockchain.check_consistency_tree()
         blockchain.check_consistency_single_block(0)
         blockchain.check_consistency_single_block(1)
-                      
-   

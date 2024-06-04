@@ -2,8 +2,6 @@ from Blockchain.Blockchain import Blockchain
 from tests.unit.utils import setup_blockchain_n_blocks
 import unittest
 
-
-
 class TestBlockchain(unittest.TestCase):
     def test_utxo_2_blocks(self):
         blockchain = setup_blockchain_n_blocks(2)

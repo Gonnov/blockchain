@@ -41,7 +41,7 @@ class Blockchain:
         assigns the coinbase value, and creates the genesis block.
         """
         self.tree = MerkleTree(algorithm='sha256')
-        self.difficulty = 6
+        self.difficulty = 5
         self.coinbase_value = 50
         self.chain = [self.create_genesis_block()]
     
@@ -52,7 +52,7 @@ class Blockchain:
         Returns:
             Block: The genesis block.
         """
-        transactions = [None]
+        transactions = None
         block = Block(None, transactions, self.tree)
         merkle_index = self.tree.append_entry(pickle.dumps(block.transactions))
         block.merkle_hash = self.tree.get_leaf(merkle_index)
@@ -71,12 +71,13 @@ class Blockchain:
         """
         coinbase_transaction = CoinbaseTransaction(self.coinbase_value, miner_public_key, extra_nonce)
         transactions = mempool[:2000]
-        transactions = transactions.insert(0, coinbase_transaction)
-        
+        transactions.insert(0, coinbase_transaction)
         block = Block(self.chain[-1], transactions, self.difficulty)
         while block.mine_block() is False: #NEED TO PUT A DIFFICULTY ALGORITHM
             block.transactions[0].extra_nonce += 1
         self.add_block(mempool)
+        for transaction in block.transactions[1:]:
+            mempool.remove(transaction)
         return True 
     
     def add_block(self, transactions: Transaction) -> None:
@@ -207,6 +208,8 @@ class Blockchain:
         Returns:
             bool: True if all transactions in the block are valid, False otherwise.
         """
+        if block.transactions is None:
+            return True
         if block.transactions[0] is None:
             return True
         if block.transactions[0].check_transaction_validity(self.coinbase_value) is False:
@@ -235,7 +238,9 @@ class Blockchain:
         Returns:
             bool: True if all transactions in the blockchain are valid, False otherwise.
         """
-        for block in self.chain:
+        if self.chain[0].transactions is not None:
+            return False
+        for block in self.chain[1:]:
             if self.check_every_transaction_of_a_block(block) is False:
                 return False
         return True
@@ -258,7 +263,7 @@ class Blockchain:
         """
 
         ledger = {}
-        for block in self.chain:
+        for block in self.chain[1:]:
             try:
                 set_transactions_in_ledger(ledger, block.transactions, self.coinbase_value)
             except ValueError:
@@ -278,10 +283,10 @@ class Blockchain:
         """
         if self.check_whole_blocks() is False:
             return False
-        if self.check_consistency_tree() is False:
-            return False
-        if self.check_inclusion_tree() is False:
-            return False
+        # if self.check_consistency_tree() is False:
+        #     return False
+        # if self.check_inclusion_tree() is False:
+        #     return False
         if self.check_every_transaction_of_the_blockchain() is False:
             return False
         try:

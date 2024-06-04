@@ -43,7 +43,6 @@ class Block:
         self.nonces = 0
         self.merkle_hash = None
         self.difficulty = difficulty
-    
         if previous_block is None:
             self.height = 0
             self.previous_hash = None
@@ -61,7 +60,6 @@ class Block:
         Returns:
             str: The SHA-256 hash of the block.
         """
-        self.timestamp = date.datetime.now()
         hash_string = str(self.height) + str(self.timestamp) + str(self.merkle_hash) + str(self.previous_hash) + str(self.nonces)
         return hashlib.sha256(hash_string.encode()).hexdigest()
     

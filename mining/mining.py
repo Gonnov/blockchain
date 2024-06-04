@@ -16,7 +16,7 @@ def start_server():
     except:
         print("Invalid port number, using default port number 12345")
         port = 12345
-    node = BlockchainNode('', port, 1) #SHOULD BE ip, host, 1
+    node = BlockchainNode('', port) #SHOULD BE ip, host
     node.start()
     return node
 
@@ -47,7 +47,7 @@ def start_mining(node):
     while True:
         node.blockchain.start_mining(miner_public_key, 0, node.mempool)
         print("Block mined")
-        node.send_data_to_all_nodes("new block", node.blockchain.chain[-1])
+        node.send_data_to_all_nodes("blockchain", node.blockchain)
         
 
         

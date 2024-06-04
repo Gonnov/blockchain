@@ -9,7 +9,7 @@ from user.Wallet import Wallet
 
 def make_basic_coinbase_transaction(amount: int):
     user = Wallet()
-    coinbase_transaction = CoinbaseTransaction(amount, user.public_key)
+    coinbase_transaction = CoinbaseTransaction(amount, user.public_key, 0)
     return coinbase_transaction
 
 def make_basic_transaction():

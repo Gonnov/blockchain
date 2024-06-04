@@ -71,9 +71,9 @@ class TransactionInput:
         """
         self.transaction_output_hash = transaction_output.get_transaction_output_hash()
         if type(sender_public_key) == str:
-            sender_public_key = bytes.fromhex(sender_public_key)
+            self.sender_public_key = bytes.fromhex(sender_public_key)
         else:
-            sender_public_key = sender_public_key
+            self.sender_public_key = sender_public_key
         self.sender_signature = sender_signature
         self.output_index = output_index
         self.sequence_number = sequence_number
