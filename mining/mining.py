@@ -43,11 +43,10 @@ def get_miner_public_key():
 def start_mining(node):
     miner_public_key = get_miner_public_key()
     print("Mining started")
-    i = 0
     while True:
         node.blockchain.start_mining(miner_public_key, 0, node.mempool)
         print("Block mined")
-        node.send_data_to_all_nodes("blockchain", node.blockchain)
+        node.send_data_to_all_nodes("new block", node.blockchain)
         
 
         

@@ -6,17 +6,15 @@ def remove_transaction_from_mempool(mempool, block):
             mempool.remove(transaction)
     return mempool
 
-def manageBlockchain(self, blockchain: Blockchain):
-    for block in blockchain.chain:
-        print(block.transactions)
+
+def manageBlockchain(self, typename: str, blockchain: Blockchain):
     if len(self.blockchain.chain) > len(blockchain.chain):
-        return 
+        return False
     if blockchain.check_whole_blockchain() is False:
-        return
-    for block in blockchain.chain:
-        if block not in self.blockchain.chain and block.previous_hash is not None:
-            print(block.transactions)
-            self.blockchain.chain.append(block)
-            self.mempool = remove_transaction_from_mempool(self.mempool, block)
+        return False
+    self.blockchain = blockchain
+    for block in self.blockchain.chain:
+        self.mempool = remove_transaction_from_mempool(self.mempool, block)
+
     
     

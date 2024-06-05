@@ -110,8 +110,9 @@ class BlockchainNode(Node):
             managePeers(self, data['data'])
         elif data['type'] == "mempool":
             manageMempool(self, data['data'])
-        elif data['type'] == "blockchain":
-            manageBlockchain(self, data['data'])
+        elif data['type'] == "blockchain" or data['type'] == "new block":
+            manageBlockchain(self, data['type'],data['data'])
+
 
     def node_disconnect_with_outbound_node(self, node: Node):
         """
@@ -158,6 +159,11 @@ class BlockchainNode(Node):
             type (str): The type of data being sent.
             data (any): The data to send.
         """
-        for peer in self.peers:
-            self.send_data_to_node(peer, type, data)
+        already_send = []
+        for node in self.all_nodes:
+            if node in already_send:
+                continue
+            else:
+                self.send_data_to_node(node, type, data)
+                already_send.append(node)
         pass

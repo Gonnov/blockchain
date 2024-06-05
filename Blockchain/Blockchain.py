@@ -7,7 +7,6 @@ from pymerkle import verify_consistency, verify_inclusion
 import pickle
 import ecdsa
 
-
 class Blockchain:
     """
     Represents the blockchain and provides methods for managing and verifying blocks and transactions.
@@ -41,7 +40,7 @@ class Blockchain:
         assigns the coinbase value, and creates the genesis block.
         """
         self.tree = MerkleTree(algorithm='sha256')
-        self.difficulty = 5
+        self.difficulty = 6
         self.coinbase_value = 50
         self.chain = [self.create_genesis_block()]
     
@@ -73,23 +72,23 @@ class Blockchain:
         transactions = mempool[:2000]
         transactions.insert(0, coinbase_transaction)
         block = Block(self.chain[-1], transactions, self.difficulty)
-        while block.mine_block() is False: #NEED TO PUT A DIFFICULTY ALGORITHM
+        self.mining_flag.clear()
+        while block.mine_block(self) is False: #NEED TO PUT A DIFFICULTY ALGORITHM
             block.transactions[0].extra_nonce += 1
-        self.add_block(mempool)
+        self.add_block(block)
         for transaction in block.transactions[1:]:
             mempool.remove(transaction)
         return True 
     
-    def add_block(self, transactions: Transaction) -> None:
+    def add_block(self, block) -> None:
         """
         Add a new block to the blockchain.
 
         Args:
             transactions: The transactions to be added to the block.
         """
-        block = Block(self.chain[-1], transactions, self.tree)
-        merkle_index = self.tree.append_entry(pickle.dumps(block.transactions))
-        block.merkle_hash = self.tree.get_leaf(merkle_index)
+        # merkle_index = self.tree.append_entry(pickle.dumps(block.transactions))
+        # block.merkle_hash = self.tree.get_leaf(merkle_index)
         self.chain.append(block)
         
     def check_whole_blocks(self) -> bool:
@@ -104,6 +103,9 @@ class Blockchain:
             previous_block = self.chain[i-1]
             if current_block.previous_hash != previous_block.calculate_hash():
                 return False
+            if current_block.verify_block() is False:
+                return False
+            
         return True
     
     def check_consistency_single_block(self, block_height: int) -> None:
@@ -282,16 +284,19 @@ class Blockchain:
             bool: True if the entire blockchain is valid, False otherwise.
         """
         if self.check_whole_blocks() is False:
+            print("whole block")
             return False
         # if self.check_consistency_tree() is False:
         #     return False
         # if self.check_inclusion_tree() is False:
         #     return False
         if self.check_every_transaction_of_the_blockchain() is False:
+            print("check transac")
             return False
         try:
             self.get_every_utxo()
         except ValueError:
+            print("utxo")
             return False
         return True
 
