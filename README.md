@@ -5,7 +5,7 @@
     <h1 align="center">BLOCKCHAIN</h1>
 </p>
 <p align="center">
-    <em><code>► INSERT-TEXT-HERE</code></em>
+    <em><code>► A basic blockchain based on bitcoin</code></em>
 </p>
 <p align="center">
 	<img src="https://img.shields.io/github/license/neoff69/blockchain?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
@@ -23,29 +23,14 @@
   <summary>Table of Contents</summary><br>
 
 -   [ Overview](#-overview)
--   [ Features](#-features)
 -   [ Repository Structure](#-repository-structure)
 -   [ Modules](#-modules)
--   [ Getting Started](#-getting-started)
-    -   [ Installation](#-installation)
-    -   [ Usage](#-usage)
-    -   [ Tests](#-tests)
--   [ Project Roadmap](#-project-roadmap)
--   [ Contributing](#-contributing)
--   [ License](#-license)
--   [ Acknowledgments](#-acknowledgments)
 </details>
 <hr>
 
 ## Overview
 
-<code>► INSERT-TEXT-HERE</code>
-
----
-
-## Features
-
-<code>► INSERT-TEXT-HERE</code>
+<code>► </code>
 
 ---
 
@@ -95,35 +80,35 @@
 
 <details closed><summary>transaction</summary>
 
-| File                                                                                                           | Summary                         |
-| -------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| [Transaction.py](https://github.com/neoff69/blockchain/blob/master/transaction/Transaction.py)                 | <code>► INSERT-TEXT-HERE</code> |
-| [CoinbaseTransaction.py](https://github.com/neoff69/blockchain/blob/master/transaction/CoinbaseTransaction.py) | <code>► INSERT-TEXT-HERE</code> |
-| [TransactionData.py](https://github.com/neoff69/blockchain/blob/master/transaction/TransactionData.py)         | <code>► INSERT-TEXT-HERE</code> |
+| File                                                                                                           | Summary                                                                            |
+| -------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [Transaction.py](https://github.com/neoff69/blockchain/blob/master/transaction/Transaction.py)                 | <code>► The usual transaction that is made in the blockchain </code>               |
+| [CoinbaseTransaction.py](https://github.com/neoff69/blockchain/blob/master/transaction/CoinbaseTransaction.py) | <code>►The first transaction of the block, that give a reward to the miner </code> |
+| [TransactionData.py](https://github.com/neoff69/blockchain/blob/master/transaction/TransactionData.py)         | <code>► The data that the transaction need</code>                                  |
 
 </details>
 
 <details closed><summary>user</summary>
 
-| File                                                                          | Summary                         |
-| ----------------------------------------------------------------------------- | ------------------------------- |
-| [Wallet.py](https://github.com/neoff69/blockchain/blob/master/user/Wallet.py) | <code>► INSERT-TEXT-HERE</code> |
+| File                                                                          | Summary                                                            |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [Wallet.py](https://github.com/neoff69/blockchain/blob/master/user/Wallet.py) | <code>► A basic wallet creation with public and private key</code> |
 
 </details>
 
 <details closed><summary>mining</summary>
 
-| File                                                                            | Summary                         |
-| ------------------------------------------------------------------------------- | ------------------------------- |
-| [mining.py](https://github.com/neoff69/blockchain/blob/master/mining/mining.py) | <code>► INSERT-TEXT-HERE</code> |
+| File                                                                            | Summary                                             |
+| ------------------------------------------------------------------------------- | --------------------------------------------------- |
+| [mining.py](https://github.com/neoff69/blockchain/blob/master/mining/mining.py) | <code>► The code to start the mining process</code> |
 
 </details>
 
 <details closed><summary>mining.mining_test</summary>
 
-| File                                                                                                                          | Summary                         |
-| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| [test_connection_network.py](https://github.com/neoff69/blockchain/blob/master/mining/mining_test/test_connection_network.py) | <code>► INSERT-TEXT-HERE</code> |
+| File                                                                                                                          | Summary                                                                   |
+| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| [test_connection_network.py](https://github.com/neoff69/blockchain/blob/master/mining/mining_test/test_connection_network.py) | <code>► A basic test to check if the P2P network work in localhost</code> |
 
 </details>
 
