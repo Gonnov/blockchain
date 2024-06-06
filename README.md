@@ -31,8 +31,7 @@
     -   [ Tests](#-tests)
 -   [ Project Roadmap](#-project-roadmap)
 -   [ Contributing](#-contributing)
--   [ License](#-license)
--   [ Acknowledgments](#-acknowledgments)
+
 </details>
 <hr>
 
@@ -180,27 +179,21 @@ The BlockchainX project implements a decentralized blockchain network with core 
 > ```console
 > $ cd blockchain
 > ```
->
-> 3. Use the virtual environment:
->
-> ```console
-> $ source venv/bin/activate
-> ```
->
-> 4. Start mining::
->
-> ```console
-> $ source venv/bin/activate
-> ```
 
 ### Usage
 
 <h4>From <code>source</code></h4>
 
-> Run blockchain using the command below:
+> 1. Use the virtual environment:
 >
 > ```console
-> $ python main.py
+> $ source venv/bin/activate
+> ```
+>
+> 2. Start mining::
+>
+> ```console
+> $ source venv/bin/activate
 > ```
 
 ### Tests
@@ -208,16 +201,16 @@ The BlockchainX project implements a decentralized blockchain network with core 
 > Run the test suite using the command below:
 >
 > ```console
-> $ pytest
+> $ python -m unittest discover -s tests -p 'test_*.py'
 > ```
 
 ---
 
 ## Project Roadmap
 
--   [x] `► INSERT-TASK-1`
--   [ ] `► INSERT-TASK-2`
--   [ ] `► ...`
+-   [ ] `► Add multi threading for new block detection`
+-   [ ] `► Fix the merkle tree for verification`
+-   [ ] `► Add a graphic interface`
 
 ---
 
@@ -263,19 +256,5 @@ Contributions are welcome! Here are several ways you can contribute:
    </a>
 </p>
 </details>
-
----
-
-## License
-
-This project is protected under the [SELECT-A-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
-
----
-
-## Acknowledgments
-
--   List any resources, contributors, inspiration, etc. here.
-
-[**Return**](#-overview)
 
 ---

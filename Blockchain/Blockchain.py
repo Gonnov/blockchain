@@ -72,8 +72,7 @@ class Blockchain:
         transactions = mempool[:2000]
         transactions.insert(0, coinbase_transaction)
         block = Block(self.chain[-1], transactions, self.difficulty)
-        self.mining_flag.clear()
-        while block.mine_block(self) is False: #NEED TO PUT A DIFFICULTY ALGORITHM
+        while block.mine_block() is False: #NEED TO PUT A DIFFICULTY ALGORITHM
             block.transactions[0].extra_nonce += 1
         self.add_block(block)
         for transaction in block.transactions[1:]:
