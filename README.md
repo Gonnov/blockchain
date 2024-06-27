@@ -193,7 +193,7 @@ The BlockchainX project implements a decentralized blockchain network with core 
 > 2. Start mining::
 >
 > ```console
-> $ source venv/bin/activate
+> $ python -m mining.mining
 > ```
 
 ### Tests
